@@ -2,6 +2,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const Messages = require('./dbMessages');
 const Pusher = require('pusher');
+const cors = require('cors');
+
 require('dotenv').config();
 
 //* App config
@@ -18,11 +20,7 @@ const pusher = new Pusher({
 
 //* Middlewares
 app.use(express.json());
-app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Headers', '*');
-  next();
-});
+app.use(cors());
 
 //* DB Config
 const connectionUrl = process.env.DB_URL;
@@ -46,6 +44,8 @@ db.once('open', () => {
       pusher.trigger('messages', 'inserted', {
         name: messageDetails.name,
         message: messageDetails.message,
+        timestamp: messageDetails.timestamp,
+        received: messageDetails.received,
       });
     } else {
       console.log('Error trigerring Pusher');
