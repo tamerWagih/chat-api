@@ -1,10 +1,10 @@
 const mongoose = require('mongoose');
 
-const whatsappSchema = mongoose.Schema({
+const messageContentSchema = mongoose.Schema({
   message: String,
   name: String,
-  timestamp: String,
-  received: Boolean,
+  timestamp: { type: Date, default: Date.now },
+  roomName: String,
 });
 
-module.exports = mongoose.model('messageContent', whatsappSchema);
+module.exports = mongoose.model('messageContent', messageContentSchema);
